@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Car Wash - Inicio</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="logo">
+            <h1>Full Car Wash</h1>
+        </div>
+        <nav class="nav">
+            <a href="#servicios">Servicios</a>
+            <a href="#contacto">Contacto</a>
+            {% if 'user' in session %}
+                <a href="/dashboard">Panel de Administración</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+                <a href="/login" class="btn">Iniciar Sesión</a>
+            {% endif %}
+        </nav>
+        
+    </header>
+
+    <!-- Banner principal -->
+    <section class="banner">
+        <div class="banner-content">
+            <h2>El mejor lavado para tu auto</h2>
+            <p>Calidad y rapidez en cada servicio</p>
+            <a href="#contacto" class="btn">Contáctanos</a>
+        </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section id="servicios" class="servicios">
+        <h2>Nuestros Servicios</h2>
+        <div class="servicio">
+            <h3>Lavado Completo</h3>
+            <p>Incluye limpieza interior y exterior en profundidad.</p>
+        </div>
+        <div class="servicio">
+            <h3>Lavado Exterior</h3>
+            <p>Encerado y pulido rápido para dar brillo a tu auto.</p>
+        </div>
+        <div class="servicio">
+            <h3>Lavado Interior</h3>
+            <p>Limpieza de asientos, alfombras y ventanas.</p>
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contacto" class="contacto">
+        <h2>Contacto</h2>
+        <p>Dirección: Av. Ejemplo 123, Ciudad</p>
+        <p>Teléfono: +56 9 1234 5678</p>
+        <p>Email: contacto@fullcarwash.com</p>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Full Car Wash. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

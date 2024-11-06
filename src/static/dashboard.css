@@ -1,0 +1,57 @@
+/* Configuración general */
+body, h1 {
+    color: #ffffff;
+}
+
+/* Barra Superior */
+header.navbar {
+    background-color: #0d6efd !important;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 8px;
+}
+
+/* Contenedor Principal */
+#contentWrapper {
+    margin-top: 60px; /* Altura de la barra superior */
+    display: flex;
+}
+
+/* Barra Lateral Derecha */
+.sidebar {
+    width: 200px;
+    position: fixed;
+    right: 0;
+    top: 60px; /* Alineada justo debajo de la barra superior */
+    bottom: 0;
+    padding-top: 20px;
+    transition: transform 0.3s ease;
+    z-index: 900;
+}
+
+.sidebar.minimized {
+    transform: translateX(90%);
+}
+
+#toggleButton {
+    position: absolute;
+    top: 10px;
+    left: -35px;
+    background-color: #0d6efd;
+    color: #ffffff;
+    border-radius: 50%;
+}
+
+/* Contenido Principal */
+#mainContent {
+    flex: 1;
+    margin-right: 200px; /* Espacio para la barra lateral */
+    padding: 20px;
+    transition: margin-right 0.3s ease;
+}
+
+.sidebar.minimized + #mainContent {
+    margin-right: 0;
+}

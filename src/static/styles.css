@@ -1,0 +1,106 @@
+/* Reseteo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Encabezado */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+    color: #fff;
+}
+
+header .logo h1 {
+    font-size: 24px;
+}
+
+header .nav a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+header .nav .btn {
+    background-color: #f4a261;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+/* Banner principal */
+.banner {
+    background-image: url('../static/banner.jpg'); /* Puedes cambiar esto por cualquier imagen */
+    background-size: cover;
+    background-position: center;
+    padding: 100px 20px;
+    text-align: center;
+    color: #fff;
+}
+
+.banner-content h2 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.banner-content p {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.banner-content .btn {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+/* Sección de Servicios */
+.servicios {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.servicios h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.servicios .servicio {
+    display: inline-block;
+    width: 30%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+}
+
+/* Sección de Contacto */
+.contacto {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+}
+
+.contacto p {
+    margin: 5px 0;
+}
+
+/* Pie de página */
+footer {
+    padding: 10px 20px;
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+}
