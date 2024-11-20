@@ -1,36 +1,269 @@
+/*PALETA DE COLORES
+#27374D
+#526D82
+#9DB2BF
+#DDE6ED
+/*
+
 /* Configuración general */
-body, h1 {
-    color: #ffffff;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,500&display=swap');
+:root{
+    --color-barra-lateral:#9DB2BF;
+
+    --color-texto:#222831;
+    --color-texto-menu:#798777;
+
+    --color-menu-hover: #8295a0;
+    --color-menu-hover-texto: #d4d2d2;
+    
+    --color-boton:#222831;
+    --color-boton-texto:#9DB2BF;
+
+    /* colores planilla */
+
+    --color-planilla-boton: #a0a8b4;
+    --color-planilla-boton-texto: #222831;
+
+}
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+
+body{
+    height: 100vh;
+    width: 100%;
+    background-color: whitesmoke;
 }
 
 /* Barra Superior */
+
 header.navbar {
-    background-color: #0d6efd !important;
     position: fixed;
     top: 0;
+    left:250px;
+    height: 30px;
     width: 100%;
-    z-index: 1000;
     padding: 8px;
+    background-color: pink;
+    transition: left 0.5s ease;
 }
 
-/* Contenedor Principal */
+header.navbar.min{
+    left: 80px;
+}
+
+/* Contenedor Principal 
+*/
+/*
 #contentWrapper {
     margin-top: 60px; /* Altura de la barra superior */
-    display: flex;
+ /*   display: flex;
 }
 
-/* Barra Lateral Derecha */
-.sidebar {
-    width: 200px;
+/*------------- Barra Lateral izquierda */
+.barra-lateral {
     position: fixed;
-    right: 0;
-    top: 60px; /* Alineada justo debajo de la barra superior */
-    bottom: 0;
-    padding-top: 20px;
-    transition: transform 0.3s ease;
-    z-index: 900;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px 15px;
+    background-color: var(--color-barra-lateral);
+    transition: width 0.5s ease;
 }
 
+.mini-barra-lateral {
+    width: 80px;
+}
+
+.barra-lateral span{
+    width: 100px;
+    white-space: nowrap;
+    font-size: 18px;
+    text-align: left;
+    opacity: 1;
+    transition: opacity 0.5s ease, width 0.5s ease;
+}
+
+.barra-lateral span.oculto{
+    width: 0;
+    opacity: 0;
+}
+
+/*------------- Nombre Pagina */
+.barra-lateral .nombre-pagina{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.barra-lateral .nombre-pagina span{
+    margin-left: 5px;
+    font-size: 25px;
+}
+
+.barra-lateral .nombre-pagina ion-icon{
+    min-width: 20px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+
+/*------------- Boton Planilla */
+
+.barra-lateral .boton-planilla{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+}
+
+.barra-lateral .boton-planilla ion-icon{
+    min-width: 50px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/*------------- Menu Navegacion */
+
+.barra-lateral .navegacion li{
+    list-style: none;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.barra-lateral .navegacion a{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    color: var(--color-texto);
+    background-color: var(--color-barra-lateral);
+}
+
+.barra-lateral .navegacion a:hover{
+    background-color: var(--color-menu-hover);
+    color: var(--color-menu-hover-texto);
+    transition: opacity 0.5s ease;
+
+}
+
+.barra-lateral .navegacion ion-icon{
+    min-width: 50px;
+    font-size: 20px;
+}
+
+/*-------------MAIN-------------------------------*/
+
+
+main{
+    margin-left: 250px;
+    margin-top: 30px;
+    padding: 20px;
+    transition: margin-left 0.5s ease;
+
+}
+
+main.min-main{
+    margin-left: 80px;
+}
+
+/*-----------------PLANILLA-------------*/
+
+.botonera{
+    margin: 5px;
+}
+
+.botonera span{
+    font-size: 14px;
+    align-items: center;
+    color: var(--color-planilla-boton-texto);
+}
+
+.botonera ion-icon{
+    min-width: 25px;
+    min-height: 25px;
+    cursor: pointer;
+}
+
+
+.botonera .boton-nuevo{
+    width: 120px;
+    height: 45px; 
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: var(--color-planilla-boton);
+}
+
+
+.botonera .boton-lavador{
+    width: 120px;
+    height: 45px;
+
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: var(--color-planilla-boton);
+}
+
+.botonera .boton-revisar{
+    width: 120px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.botonera .boton-entregar{
+    width: 120px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.botonera .boton-eliminar{
+    width: 120px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+/*
 .sidebar.minimized {
     transform: translateX(90%);
 }
@@ -45,10 +278,11 @@ header.navbar {
 }
 
 /* Contenido Principal */
+/*
 #mainContent {
     flex: 1;
     margin-right: 200px; /* Espacio para la barra lateral */
-    padding: 20px;
+ /*   padding: 20px;
     transition: margin-right 0.3s ease;
 }
 

@@ -1,0 +1,45 @@
+<h1>Planilla de Servicios</h1>
+<div class="botonera">
+    <button class="boton-nuevo" id="btnAgregarServicio">
+        <ion-icon name="add-outline"></ion-icon>
+        <span>Nuevo</span>
+    </button>
+    <button class="boton-lavador" id="btnAgregarLavador">
+        <ion-icon name="person-add-outline"></ion-icon>
+        <span>Lavador</span>
+    </button>
+    <button class="boton-revisar" id="btnRevisar">
+        <ion-icon name="glasses-outline"></ion-icon>
+        <span>Revisar</span>
+    </button>
+    <button class="boton-entregar" id="btnEntregar">
+        <ion-icon name="key-outline"></ion-icon>
+        <span>Pagar</span>
+    </button>
+    <button class="boton-eliminar" id="btnEliminar">
+        <ion-icon name="trash-outline"></ion-icon>
+        <span>Eliminar</span>
+    </button>
+</div>
+
+
+<table border="1" cellspacing="0" cellpadding="10">
+    <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+    </tr>
+    {% if servicios %}
+        {% for service in servicios %}
+        <tr>
+            <td>{{ service[1] }}</td>  <!-- Nombre del servicio -->
+            <td>{{ service[2] }}</td>  <!-- Descripción del servicio -->
+            <td>${{ service[3] }}</td>  <!-- Precio del servicio -->
+        </tr>
+        {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="3" style="text-align: center;">No hay servicios disponibles.</td>
+    </tr>
+    {% endif %}
+</table>
