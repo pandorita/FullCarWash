@@ -142,6 +142,7 @@ def dashboard_planilla():
      # Renderiza planilla.html
     return render_template('planilla.html', servicios=servicios)
 
+
 # Ruta para mostrar el formulario
 @app.route('/dashboard/nuevo_servicio')
 def nuevo_servicio():
