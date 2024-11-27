@@ -16,56 +16,57 @@ SCHEMA = """
 
 CREATE TABLE IF NOT EXISTS planilla (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    client_id INTEGER REFERENCES clients(id),
-    vehicle_id INTEGER REFERENCES vehicles(id),
-    service_id INTEGER REFERENCES services(id),
-    worker_id INTEGER REFERENCES workers(id),
-    discount_id INTEGER REFERENCES discounts(id),
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_price REAL NOT NULL
+    id_cliente INTEGER REFERENCES clientes(id),
+    id_vehiculo INTEGER REFERENCES vehiculos(id),
+    id_servicio INTEGER REFERENCES servicios(id),
+    id_empleado INTEGER REFERENCES empleados(id),
+    id_descuento INTEGER REFERENCES descuentos(id),
+    fecha DATE NOT NULL,               
+    hora_ing TIME NOT NULL,       
+    hora_sal TIME,                 
+    valor_total REAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS clientes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre TEXT NOT NULL,
-    phone TEXT,
-    email TEXT
+    telefono TEXT,
+    correo TEXT
 );
 
 CREATE TABLE IF NOT EXISTS vehiculos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    client_id INTEGER REFERENCES clients(id),
-    make TEXT NOT NULL,
+    id_cliente INTEGER REFERENCES clientes(id),
     model TEXT NOT NULL,
-    year INTEGER NOT NULL,
-    license_plate TEXT NOT NULL
+    color TEXT NOT NULL,
+    patente TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS services (
+CREATE TABLE IF NOT EXISTS servicios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre TEXT NOT NULL,
+    tamaño TEXT NOT NULL,
     valor REAL NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS workers (
+CREATE TABLE IF NOT EXISTS empleados (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    position TEXT,
-    phone TEXT
+    nombre TEXT NOT NULL,
+    rango TEXT,
+    telefono TEXT
 );
 
-CREATE TABLE IF NOT EXISTS discounts (
+CREATE TABLE IF NOT EXISTS descuentos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    description TEXT,
-    percentage REAL NOT NULL
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    porcentaje REAL NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS usuarios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    role TEXT NOT NULL
+    usuario TEXT NOT NULL UNIQUE,
+    contraseña TEXT NOT NULL,
+    nivel TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS dailynotes (
@@ -132,7 +133,13 @@ def dashboard_planilla():
     # Carga los servicios desde la base de datos
     conn = sqlite3.connect('db/lavado.db')  # Conéctate a la base de datos
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM planilla")  # Consulta todos los servicios
+    cursor.execute("""
+                    SELECT 
+                        planilla.id AS planilla_id,
+                        clientes.nombre AS cliente_nombre
+                    FROM planilla
+                    LEFT JOIN clientes ON planilla.id_cliente = clientes.id;
+                   """)  
     servicios = cursor.fetchall()  # Recupera todos los servicios
     conn.close()
     

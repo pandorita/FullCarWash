@@ -258,7 +258,21 @@ main.min-main{
 
 
 
+form div {
+    display: flex; /* Coloca el label y el input en la misma línea */
+    align-items: center; /* Alinea verticalmente los elementos */
+    margin-bottom: 10px; /* Espacio entre los pares label-input */
+}
 
+form label {
+    margin-right: 10px; /* Espacio entre el label y el input */
+    width: 100px; /* Ancho fijo para alinear los labels */
+}
+
+form input {
+    flex: 1; /* Hace que el input ocupe el espacio restante */
+    max-width: 300px; /* Limita el ancho máximo de los inputs */
+}
 
 
 

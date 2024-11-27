@@ -1,13 +1,33 @@
 <div id="formNuevoServicio">
     <form id="formServicio">
-        <label for="nombre">Nombre del Servicio:</label>
-        <input type="text" id="nombre" name="nombre" required>
-        
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio" required>
-        
-        <button type="button" id="btnAceptar">Aceptar</button>
-        <button type="button" id="btnCancelar">Cancelar</button>
+        <div>
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" name="cliente" required>
+        </div>
+        <div>
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required>
+        </div>
+        <div>
+            <label for="vehiculo">Vehículo:</label>
+            <input type="text" id="vehiculo" name="vehiculo" required>
+        </div>
+        <div>
+            <label for="patente">Patente:</label>
+            <input type="text" id="patente" name="patente" required>
+        </div>
+        <div>
+            <label for="servicio">Servicio:</label>
+            <input type="text" id="servicio" name="servicio" required>
+        </div>
+        <div>
+            <label for="descuento">Descuento:</label>
+            <input type="number" id="descuento" name="descuento" step="0.01" required>
+        </div>
+        <div>
+            <button type="button" id="btnAceptar">Aceptar</button>
+            <button type="button" id="btnCancelar">Cancelar</button>
+        </div>
     </form>
 </div>
 
