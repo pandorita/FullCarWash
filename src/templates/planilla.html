@@ -30,15 +30,19 @@
         <th>Hora Ing.</th>
         <th>Servicio</th>
         <th>Lavador</th>
-        <th>Precio</th>
         <th>Total</th>
+        <th>Estado</th>
     </tr>
     {% if servicios %}
         {% for service in servicios %}
         <tr>
-            <td>{{ service[1] }}</td>  <!-- Nombre del servicio -->
-            <td>{{ service[2] }}</td>  <!-- Descripción del servicio -->
-            <td>${{ service[3] }}</td>  <!-- Precio del servicio -->
+            <td>{{ service[1] }}</td>  
+            <td>{{ service[4] }}</td> 
+            <td>{{ service[8] }}</td>
+            <td>{{ service[6] }}</td>
+            <td>{{ service[5] }}</td>
+            <td>${{ service[10] }}</td> 
+            <td>{{ service[11] }}</td> 
         </tr>
         {% endfor %}
     {% else %}

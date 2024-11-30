@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from datetime import timedelta
 import sqlite3
 import os
+from datetime import datetime
 
 from config import config
 
@@ -16,15 +17,17 @@ SCHEMA = """
 
 CREATE TABLE IF NOT EXISTS planilla (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_cliente INTEGER REFERENCES clientes(id),
-    id_vehiculo INTEGER REFERENCES vehiculos(id),
-    id_servicio INTEGER REFERENCES servicios(id),
-    id_empleado INTEGER REFERENCES empleados(id),
-    id_descuento INTEGER REFERENCES descuentos(id),
-    fecha DATE NOT NULL,               
+    cliente TEXT NOT NULL,
+    telefono TEXT NOT NULL,
+    vehiculo TEXT NOT NULL,
+    patente TEXT NOT NULL,
+    lavador TEXT NOT NULL,
+    servicio TEXT NOT NULL,
+    fecha TEXT NOT NULL,
     hora_ing TIME NOT NULL,       
     hora_sal TIME,                 
-    valor_total REAL NOT NULL
+    valor_total REAL NOT NULL,
+    estado TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS clientes (
@@ -134,11 +137,7 @@ def dashboard_planilla():
     conn = sqlite3.connect('db/lavado.db')  # Conéctate a la base de datos
     cursor = conn.cursor()
     cursor.execute("""
-                    SELECT 
-                        planilla.id AS planilla_id,
-                        clientes.nombre AS cliente_nombre
-                    FROM planilla
-                    LEFT JOIN clientes ON planilla.id_cliente = clientes.id;
+                    SELECT * FROM planilla
                    """)  
     servicios = cursor.fetchall()  # Recupera todos los servicios
     conn.close()
@@ -162,14 +161,24 @@ def nuevo_servicio():
 def agregar_servicio():
     # Obtener los datos del formulario
     data = request.get_json()
-    nombre = data.get('nombre')
-    precio = data.get('precio')
+    cliente = data.get('cliente')
+    telefono = data.get('telefono')
+    vehiculo = data.get('vehiculo')
+    patente = data.get('patente')
+    servicio = data.get('servicio')
+    valor = 10000 #Eliminar linea y agregar sistema automatico desde tipo de servicio
+
+    # Obtener la fecha y hora actuales
+    fecha_actual = datetime.now().strftime('%d/%m/%Y')
+    hora_actual = datetime.now().strftime('%H:%M')
     
     # Insertar los datos en la base de datos
-    if nombre and precio:
+    if (cliente and servicio and telefono and patente):
         conn = sqlite3.connect(DATABASE_PATH)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO servicios (nombre, precio) VALUES (?, ?)", (nombre, precio))
+        cursor.execute("""INSERT INTO planilla (cliente, telefono, vehiculo, patente, servicio, fecha, hora_ing, valor_total) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)""", 
+                       (cliente, telefono, vehiculo, patente, servicio, fecha_actual, hora_actual, valor))
         conn.commit()
         conn.close()
     
@@ -193,6 +202,27 @@ def create_database():
     
     # Cerrar conexión
     conn.close()
+
+@app.route('/dashboard/clientes')
+def dashboard_clientes():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    # Carga los servicios desde la base de datos
+    conn = sqlite3.connect('db/lavado.db')  # Conéctate a la base de datos
+    cursor = conn.cursor()
+    cursor.execute("""
+                    SELECT * FROM clientes
+                   """)  
+    servicios = cursor.fetchall()  # Recupera todos los clientes
+    conn.close()
+    
+    # Verifica el contenido de los servicios
+    print("Clientes recuperados:", servicios)  # Asegúrate de que esta línea imprima algo
+
+     # Renderiza planilla.html
+    return render_template('clientes.html', servicios=servicios)
+
 
 
 if __name__ == "__main__":

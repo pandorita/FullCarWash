@@ -30,27 +30,79 @@ autito.addEventListener("click", () => {
 
 //Evento click planilla para mostrar contenido
 
-// Evento de carga del documento
-document.addEventListener('DOMContentLoaded', function() {
-    const mainContent = document.getElementById('bienvenida');
-    
+
+
+// Función para asignar eventos a los botones
+function asignarEventos() {
     // Evento para cargar planilla.html
     const botonPlanilla = document.getElementById('btnPlanilla');
     if (botonPlanilla) {
-        botonPlanilla.addEventListener('click', function() {
+        botonPlanilla.addEventListener('click', function () {
             console.log("Botón Planilla clickeado");
             window.history.pushState({}, '', '/dashboard/planilla'); // Actualiza la URL sin recargar
             fetch('/dashboard/planilla')
                 .then(response => response.text())
                 .then(data => {
-                    console.log("Datos recibidos:", data);
+                    const mainContent = document.getElementById('bienvenida');
                     mainContent.innerHTML = data; // Reemplaza el contenido con planilla.html
-                    agregarEventoNuevoServicio(); // Añade el evento para btnAgregarServicio después de cargar planilla
+                    asignarEventos(); // Reasignar eventos después de cargar la nueva vista
                 })
                 .catch(error => console.error('Error al cargar la planilla:', error));
         });
     }
+
+    // Evento para cargar clientes.html
+    const botonClientes = document.getElementById('btnClientes');
+    if (botonClientes) {
+        botonClientes.addEventListener('click', function () {
+            console.log("Botón Clientes clickeado");
+            window.history.pushState({}, '', '/dashboard/clientes'); // Actualiza la URL sin recargar
+            fetch('/dashboard/clientes')
+                .then(response => response.text())
+                .then(data => {
+                    const mainContent = document.getElementById('bienvenida');
+                    mainContent.innerHTML = data; // Reemplaza el contenido con clientes.html
+                    asignarEventos(); // Reasignar eventos después de cargar la nueva vista
+                })
+                .catch(error => console.error('Error al cargar los clientes:', error));
+        });
+    }
+}
+
+// Evento de carga inicial
+document.addEventListener('DOMContentLoaded', function () {
+    const mainContent = document.getElementById('bienvenida'); // Contenedor principal del contenido dinámico
+
+    // Delegación de eventos al cuerpo del documento
+    document.body.addEventListener('click', function (event) {
+        // Detectar si el botón Planilla fue clickeado
+        if (event.target && event.target.id === 'btnPlanilla') {
+            console.log("Botón Planilla clickeado");
+            window.history.pushState({}, '', '/dashboard/planilla'); // Actualiza la URL
+            fetch('/dashboard/planilla')
+                .then(response => response.text())
+                .then(data => {
+                    mainContent.innerHTML = data; // Cargar contenido dinámico
+                })
+                .catch(error => console.error('Error al cargar la planilla:', error));
+        }
+
+        // Detectar si el botón Clientes fue clickeado
+        else if (event.target && event.target.id === 'btnClientes') {
+            console.log("Botón Clientes clickeado");
+            window.history.pushState({}, '', '/dashboard/clientes'); // Actualiza la URL
+            fetch('/dashboard/clientes')
+                .then(response => response.text())
+                .then(data => {
+                    mainContent.innerHTML = data; // Cargar contenido dinámico
+                })
+                .catch(error => console.error('Error al cargar los clientes:', error));
+        }
+    });
 });
+
+
+
 
 // Función para agregar el evento al botón Agregar Servicio
 // Evento para el botón Agregar Servicio
@@ -82,12 +134,15 @@ function cargarNuevoServicio() {
             const btnCancelar = document.getElementById('btnCancelar');
 
             if (btnAceptar) {
-                btnAceptar.addEventListener('click', function(event) {
+                btnAceptar.addEventListener('click', function(event) { 
                     event.preventDefault(); // Evita el envío por defecto del formulario
 
                     // Recoger los datos del formulario
-                    const nombre = document.getElementById('nombre').value;
-                    const precio = document.getElementById('precio').value;
+                    const cliente = document.getElementById('cliente').value;
+                    const telefono = document.getElementById('telefono').value;
+                    const vehiculo = document.getElementById('vehiculo').value;
+                    const patente = document.getElementById('patente').value;
+                    const servicio = document.getElementById('servicio').value;
 
                     // Enviar los datos al servidor con fetch
                     fetch('/agregar_servicio', {
@@ -95,7 +150,7 @@ function cargarNuevoServicio() {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ nombre, precio })
+                        body: JSON.stringify({ cliente, telefono, vehiculo, patente, servicio })
                     })
                     .then(response => {
                         if (response.ok) {
@@ -139,8 +194,11 @@ function configurarEventosNuevoServicio() {
             event.preventDefault(); // Evita el envío por defecto del formulario
 
             // Recoger los datos del formulario
-            const nombre = document.getElementById('nombre').value;
-            const precio = document.getElementById('precio').value;
+            const cliente = document.getElementById('cliente').value;
+            const telefono = document.getElementById('telefono').value;
+            const vehiculo = document.getElementById('vehiculo').value;
+            const patente = document.getElementById('patente').value;
+            const servicio = document.getElementById('servicio').value;
 
             // Enviar los datos al servidor con fetch
             fetch('/agregar_servicio', {
@@ -148,7 +206,7 @@ function configurarEventosNuevoServicio() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ nombre, precio })
+                body: JSON.stringify({ cliente, telefono, vehiculo, patente, servicio })
             })
             .then(response => {
                 if (response.ok) {
@@ -201,18 +259,3 @@ document.addEventListener('click', function(event) {
         cargarNuevoServicio(); // Carga nuevo_servicio.html
     }
 });
-
-
-//const sidebar = document.querySelector('.sidebar');
-//const toggleButton = document.getElementById('toggleButton');
-
-//toggleButton.addEventListener('click', () => {
-//    sidebar.classList.toggle('minimized');
- //   toggleButton.textContent = sidebar.classList.contains('minimized') ? '⮜' : '⮞';
-//});
-
-// Mostrar sección de Planilla
-//function showPlanilla() {
-//    document.getElementById('mainContent').style.display = 'none';
-//    document.getElementById('planillaSection').style.display = 'block';
-//}
