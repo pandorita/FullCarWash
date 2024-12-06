@@ -259,3 +259,19 @@ document.addEventListener('click', function(event) {
         cargarNuevoServicio(); // Carga nuevo_servicio.html
     }
 });
+
+// Evento para el botón Agregar Servicio
+function agregarEventoNuevoCliente() {
+    setTimeout(() => { // Retrasa la búsqueda del botón para asegurar que el DOM esté listo
+        const botonAgregarCliente = document.getElementById('btnAgregarCliente');
+        if (botonAgregarCliente) {
+            console.log("Asociando evento al botón 'Agregar Cliente'.");
+            botonAgregarCliente.addEventListener('click', function() {
+                console.log("Botón Agregar Cliente clickeado");
+                cargarNuevoServicio(); // Carga nuevo_servicio.html
+            });
+        } else {
+            console.error("El botón 'Agregar Cliente' no se encontró en el DOM.");
+        }
+    }, 100); // Retraso de 100ms para asegurarte de que el DOM se haya actualizado
+}
