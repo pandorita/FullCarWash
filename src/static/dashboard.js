@@ -1,10 +1,10 @@
 console.log("Archivo JavaScript cargado");
 
 function updateDateTime() {
-const dateTimeElement = document.getElementById("dateTime");
-const now = new Date();
-const options = { dateStyle: "full", timeStyle: "medium" };
-dateTimeElement.textContent = now.toLocaleString("es-ES", options);
+    const dateTimeElement = document.getElementById("dateTime");
+    const now = new Date();
+    const options = { dateStyle: "full", timeStyle: "medium" };
+    dateTimeElement.textContent = now.toLocaleString("es-ES", options);
 }
 
 // Actualizar cada segundo
@@ -27,10 +27,6 @@ autito.addEventListener("click", () => {
         span.classList.toggle('oculto');
     });
 });     
-
-//Evento click planilla para mostrar contenido
-
-
 
 // Función para asignar eventos a los botones
 function asignarEventos() {
@@ -67,7 +63,35 @@ function asignarEventos() {
                 .catch(error => console.error('Error al cargar los clientes:', error));
         });
     }
+
+    // Evento para cargar vehiculos.html
+    const botonVehiculos = document.getElementById('btnVehiculos');
+    if (botonVehiculos) {
+        botonVehiculos.addEventListener('click', function () {
+            console.log("Botón Vehículos clickeado");
+            window.history.pushState({}, '', '/dashboard/vehiculos'); // Actualiza la URL sin recargar
+            fetch('/dashboard/vehiculos')
+                .then(response => response.text())
+                .then(data => {
+                    const mainContent = document.getElementById('bienvenida');
+                    mainContent.innerHTML = data; // Reemplaza el contenido con vehiculos.html
+                    asignarEventos(); // Reasignar eventos después de cargar la nueva vista
+                })
+                .catch(error => console.error('Error al cargar los vehículos:', error));
+        });
+    }
+
 }
+
+// Función para evitar recargar la pestaña si ya te encuentras en ella
+function evitarRecargaSiEnPestañaActual(url) {
+    if (window.location.pathname === url) {
+        console.log(`Ya estás en ${url}, no se recargará la página.`);
+        return true;
+    }
+    return false;
+}
+
 
 // Evento de carga inicial
 document.addEventListener('DOMContentLoaded', function () {
@@ -76,7 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Delegación de eventos al cuerpo del documento
     document.body.addEventListener('click', function (event) {
         // Detectar si el botón Planilla fue clickeado
-        if (event.target && event.target.id === 'btnPlanilla') {
+        if (event.target.closest('#btnPlanilla')) {
+            if (evitarRecargaSiEnPestañaActual('/dashboard/planilla')) return;
             console.log("Botón Planilla clickeado");
             window.history.pushState({}, '', '/dashboard/planilla'); // Actualiza la URL
             fetch('/dashboard/planilla')
@@ -88,7 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Detectar si el botón Clientes fue clickeado
-        else if (event.target && event.target.id === 'btnClientes') {
+        else if (event.target.closest('#btnClientes')) {
+            if (evitarRecargaSiEnPestañaActual('/dashboard/clientes')) return;
             console.log("Botón Clientes clickeado");
             window.history.pushState({}, '', '/dashboard/clientes'); // Actualiza la URL
             fetch('/dashboard/clientes')
@@ -98,28 +124,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(error => console.error('Error al cargar los clientes:', error));
         }
-    });
-});
 
-
-
-
-// Función para agregar el evento al botón Agregar Servicio
-// Evento para el botón Agregar Servicio
-function agregarEventoNuevoServicio() {
-    setTimeout(() => { // Retrasa la búsqueda del botón para asegurar que el DOM esté listo
-        const botonAgregarServicio = document.getElementById('btnAgregarServicio');
-        if (botonAgregarServicio) {
-            console.log("Asociando evento al botón 'Agregar Servicio'.");
-            botonAgregarServicio.addEventListener('click', function() {
-                console.log("Botón Agregar Servicio clickeado");
-                cargarNuevoServicio(); // Carga nuevo_servicio.html
-            });
-        } else {
-            console.error("El botón 'Agregar Servicio' no se encontró en el DOM.");
+        // Detectar si el botón Agregar Servicio fue clickeado
+        else if (event.target.closest('#btnAgregarServicio')) {
+            console.log("Botón Agregar Servicio clickeado");
+            cargarNuevoServicio(); // Carga nuevo_servicio.html
         }
-    }, 100); // Retraso de 100ms para asegurarte de que el DOM se haya actualizado
-}
+
+        // Detectar si el botón Vehiculos fue clickeado
+        else if (event.target.closest('#btnVehiculos')) {
+            if (evitarRecargaSiEnPestañaActual('/dashboard/vehiculos')) return;
+            console.log("Botón Vehiculos clickeado");
+            window.history.pushState({}, '', '/dashboard/vehiculos'); // Actualiza la URL
+            fetch('/dashboard/vehiculos')
+                .then(response => response.text())
+                .then(data => {
+                    mainContent.innerHTML = data; // Cargar contenido dinámico
+                })
+                .catch(error => console.error('Error al cargar los vehiculos:', error));
+            }
+
+            // Detectar si el botón Personal fue clickeado
+            else if (event.target.closest('#btnPersonal')) {
+                if (evitarRecargaSiEnPestañaActual('/dashboard/personal')) return;
+                console.log("Botón Personal clickeado");
+                window.history.pushState({}, '', '/dashboard/personal'); // Actualiza la URL
+                fetch('/dashboard/personal')
+                    .then(response => response.text())
+                    .then(data => {
+                        mainContent.innerHTML = data; // Cargar contenido dinámico
+                    })
+                    .catch(error => console.error('Error al cargar el personal:', error));
+            }
+        });
+    });
+
 
 // Función para cargar nuevo_servicio.html y configurar eventos
 function cargarNuevoServicio() {
@@ -183,6 +222,9 @@ function cargarNuevoServicio() {
         })
         .catch(error => console.error('Error al cargar el formulario de servicio:', error));
 }
+
+
+
 
 // Función para configurar eventos de nuevo_servicio.html
 function configurarEventosNuevoServicio() {

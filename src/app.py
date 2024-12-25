@@ -223,6 +223,45 @@ def dashboard_clientes():
      # Renderiza planilla.html
     return render_template('clientes.html', servicios=servicios)
 
+@app.route('/dashboard/vehiculos')
+def dashboard_vehiculos():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    # Carga los vehículos desde la base de datos
+    conn = sqlite3.connect(DATABASE_PATH)  # Conéctate a la base de datos
+    cursor = conn.cursor()
+    cursor.execute("""
+                    SELECT * FROM vehiculos
+                   """)  
+    vehiculos = cursor.fetchall()  # Recupera todos los vehículos
+    conn.close()
+    
+    # Verifica el contenido de los vehículos
+    print("Vehículos recuperados:", vehiculos)  # Asegúrate de que esta línea imprima algo
+
+    # Renderiza vehiculos.html
+    return render_template('vehiculos.html', vehiculos=vehiculos)
+
+@app.route('/dashboard/personal')
+def dashboard_personal():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    # Carga el personal desde la base de datos
+    conn = sqlite3.connect(DATABASE_PATH)  # Conéctate a la base de datos
+    cursor = conn.cursor()
+    cursor.execute("""
+                    SELECT * FROM empleados
+                   """)  
+    personal = cursor.fetchall()  # Recupera todo el personal
+    conn.close()
+
+    # Verifica el contenido del personal
+    print("Personal recuperado:", personal)  # Asegúrate de que esta línea imprima algo
+    
+    # Renderiza personal.html
+    return render_template('personal.html', personal=personal)
 
 
 if __name__ == "__main__":

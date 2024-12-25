@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehículos - Full Car Wash</title>
+    <link rel="stylesheet" href="../static/vehiculos.css">
+</head>
+<body>
+    <h1>Vehículos</h1>
+    <div class="botonera">
+        <button class="boton-nuevo" id="btnAgregarVehiculo">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>Nuevo</span>
+        </button>
+        <button class="boton-editar" id="btnEditarVehiculo">
+            <ion-icon name="create-outline"></ion-icon>
+            <span>Editar</span>
+        </button>
+        <button class="boton-eliminar" id="btnEliminarVehiculo">
+            <ion-icon name="trash-outline"></ion-icon>
+            <span>Eliminar</span>
+        </button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Vehículo</th>
+                <th>Patente</th>
+                <th>Modelo</th>
+                <th>Año</th>
+                <th>Color</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if vehiculos %}
+                {% for vehiculo in vehiculos %}
+                <tr>
+                    <td>{{ vehiculo.cliente }}</td>
+                    <td>{{ vehiculo.vehiculo }}</td>
+                    <td>{{ vehiculo.patente }}</td>
+                    <td>{{ vehiculo.modelo }}</td>
+                    <td>{{ vehiculo.anio }}</td>
+                    <td>{{ vehiculo.color }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center;">No hay vehículos disponibles.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

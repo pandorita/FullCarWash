@@ -3,7 +3,7 @@
 #526D82
 #9DB2BF
 #DDE6ED
-/*
+*/
 
 /* Configuración general */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,500&display=swap');
@@ -26,14 +26,12 @@
 
 }
 
-
 *{
     margin:0;
     padding:0;
     box-sizing: border-box;
     font-family: "Montserrat", sans-serif;
 }
-
 
 body{
     height: 100vh;
@@ -42,7 +40,6 @@ body{
 }
 
 /* Barra Superior */
-
 header.navbar {
     position: fixed;
     top: 0;
@@ -56,14 +53,6 @@ header.navbar {
 
 header.navbar.min{
     left: 80px;
-}
-
-/* Contenedor Principal 
-*/
-/*
-#contentWrapper {
-    margin-top: 60px; /* Altura de la barra superior */
- /*   display: flex;
 }
 
 /*------------- Barra Lateral izquierda */
@@ -115,9 +104,7 @@ header.navbar.min{
     cursor: pointer;
 }
 
-
 /*------------- Boton Planilla */
-
 .barra-lateral .boton-planilla{
     width: 100%;
     height: 45px;
@@ -129,16 +116,18 @@ header.navbar.min{
     border-radius: 10px;
     background-color: var(--color-boton);
     color: var(--color-boton-texto);
+    cursor: pointer;
 }
 
 .barra-lateral .boton-planilla ion-icon{
     min-width: 50px;
     font-size: 25px;
     cursor: pointer;
+    position: relative;
+    z-index: 10;
 }
 
 /*------------- Menu Navegacion */
-
 .barra-lateral .navegacion li{
     list-style: none;
     display: flex;
@@ -154,13 +143,13 @@ header.navbar.min{
     border-radius: 10px;
     color: var(--color-texto);
     background-color: var(--color-barra-lateral);
+    cursor: pointer;
 }
 
 .barra-lateral .navegacion a:hover{
     background-color: var(--color-menu-hover);
     color: var(--color-menu-hover-texto);
     transition: opacity 0.5s ease;
-
 }
 
 .barra-lateral .navegacion ion-icon{
@@ -169,137 +158,13 @@ header.navbar.min{
 }
 
 /*-------------MAIN-------------------------------*/
-
-
 main{
     margin-left: 250px;
     margin-top: 30px;
     padding: 20px;
     transition: margin-left 0.5s ease;
-
 }
 
 main.min-main{
     margin-left: 80px;
-}
-
-/*-----------------PLANILLA-------------*/
-
-.botonera{
-    margin: 5px;
-}
-
-.botonera span{
-    font-size: 14px;
-    align-items: center;
-    color: var(--color-planilla-boton-texto);
-}
-
-.botonera ion-icon{
-    min-width: 25px;
-    min-height: 25px;
-    cursor: pointer;
-}
-
-
-.botonera .boton-nuevo{
-    width: 120px;
-    height: 45px; 
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: var(--color-planilla-boton);
-}
-
-
-.botonera .boton-lavador{
-    width: 120px;
-    height: 45px;
-
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: var(--color-planilla-boton);
-}
-
-.botonera .boton-revisar{
-    width: 120px;
-    height: 45px;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.botonera .boton-entregar{
-    width: 120px;
-    height: 45px;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.botonera .boton-eliminar{
-    width: 120px;
-    height: 45px;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-
-
-form div {
-    display: flex; /* Coloca el label y el input en la misma línea */
-    align-items: center; /* Alinea verticalmente los elementos */
-    margin-bottom: 10px; /* Espacio entre los pares label-input */
-}
-
-form label {
-    margin-right: 10px; /* Espacio entre el label y el input */
-    width: 100px; /* Ancho fijo para alinear los labels */
-}
-
-form input {
-    flex: 1; /* Hace que el input ocupe el espacio restante */
-    max-width: 300px; /* Limita el ancho máximo de los inputs */
-}
-
-
-
-
-/*
-.sidebar.minimized {
-    transform: translateX(90%);
-}
-
-#toggleButton {
-    position: absolute;
-    top: 10px;
-    left: -35px;
-    background-color: #0d6efd;
-    color: #ffffff;
-    border-radius: 50%;
-}
-
-/* Contenido Principal */
-/*
-#mainContent {
-    flex: 1;
-    margin-right: 200px; /* Espacio para la barra lateral */
- /*   padding: 20px;
-    transition: margin-right 0.3s ease;
-}
-
-.sidebar.minimized + #mainContent {
-    margin-right: 0;
 }

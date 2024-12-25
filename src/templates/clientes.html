@@ -1,38 +1,53 @@
-<h1>Clientes</h1>
-<div class="botonera clientes">
-    <button class="boton-nuevo-cliente" id="btnAgregarCliente">
-        <ion-icon name="add-outline"></ion-icon>
-        <span>Nuevo</span>
-    </button>
-    <button class="boton-editar-cliente" id="btnEditarCliente">
-        <ion-icon name="key-outline"></ion-icon>
-        <span>Editar</span>
-    </button>
-    <button class="boton-eliminar-cliente" id="btnEliminarCliente">
-        <ion-icon name="trash-outline"></ion-icon>
-        <span>Eliminar</span>
-    </button>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Full Car Wash</title>
+    <link rel="stylesheet" href="../static/clientes.css">
+</head>
+<body>
+    <h1>Clientes</h1>
+    <div class="botonera clientes">
+        <button class="boton-nuevo-cliente" id="btnAgregarCliente">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>Nuevo</span>
+        </button>
+        <button class="boton-editar-cliente" id="btnEditarCliente">
+            <ion-icon name="key-outline"></ion-icon>
+            <span>Editar</span>
+        </button>
+        <button class="boton-eliminar-cliente" id="btnEliminarCliente">
+            <ion-icon name="trash-outline"></ion-icon>
+            <span>Eliminar</span>
+        </button>
+    </div>
 
-<table border="1" cellspacing="0" cellpadding="10">
-    <tr>
-        <th>Nº</th>
-        <th>Cliente</th>
-        <th>Telefono</th>
-        <th>Correo</th>
-    </tr>
-    {% if servicios %}
-        {% for service in servicios %}
-        <tr>
-            <td>{{ service[0] }}</td>  
-            <td>{{ service[1] }}</td> 
-            <td>{{ service[2] }}</td>
-            <td>{{ service[3] }}</td>
-        </tr>
-        {% endfor %}
-    {% else %}
-    <tr>
-        <td colspan="3" style="text-align: center;">No hay clientes disponibles.</td>
-    </tr>
-    {% endif %}
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Nº</th>
+                <th>Cliente</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if servicios %}
+                {% for service in servicios %}
+                <tr>
+                    <td>{{ service[0] }}</td>  
+                    <td>{{ service[1] }}</td> 
+                    <td>{{ service[2] }}</td>
+                    <td>{{ service[3] }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No hay clientes disponibles.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

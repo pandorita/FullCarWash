@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal - Full Car Wash</title>
+    <link rel="stylesheet" href="../static/personal.css">
+</head>
+<body>
+    <h1>Personal</h1>
+    <div class="botonera">
+        <button class="boton-nuevo" id="btnAgregarPersonal">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>Nuevo</span>
+        </button>
+        <button class="boton-editar" id="btnEditarPersonal">
+            <ion-icon name="create-outline"></ion-icon>
+            <span>Editar</span>
+        </button>
+        <button class="boton-eliminar" id="btnEliminarPersonal">
+            <ion-icon name="trash-outline"></ion-icon>
+            <span>Eliminar</span>
+        </button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Rango</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if personal %}
+                {% for persona in personal %}
+                <tr>
+                    <td>{{ persona[1] }}</td>
+                    <td>{{ persona[2] }}</td>
+                    <td>{{ persona[3] }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="3" style="text-align: center;">No hay personal disponible.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>
