@@ -54,9 +54,15 @@ CREATE TABLE IF NOT EXISTS servicios (
 CREATE TABLE IF NOT EXISTS empleados (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre TEXT NOT NULL,
-    rango TEXT,
-    telefono TEXT
+    rango TEXT NOT NULL,
+    porcentaje REAL NOT NULL,
+    telefono TEXT NOT NULL,
+    direccion TEXT NOT NULL,
+    nacionalidad TEXT NOT NULL,
+    fecha_ingreso DATE NOT NULL,
+    fecha_salida DATE
 );
+
 
 CREATE TABLE IF NOT EXISTS descuentos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -149,7 +155,7 @@ def dashboard_planilla():
     return render_template('planilla.html', servicios=servicios)
 
 
-# Ruta para mostrar el formulario
+# Ruta para mostrar el formulario para nuevo servicio
 @app.route('/dashboard/nuevo_servicio')
 def nuevo_servicio():
     if 'user' not in session:
@@ -262,6 +268,47 @@ def dashboard_personal():
     
     # Renderiza personal.html
     return render_template('personal.html', personal=personal)
+
+# Ruta para mostrar el formulario para nuevo personal
+@app.route('/dashboard/nuevo_personal')
+def nuevo_personal():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('/personal/nuevo_personal.html')
+
+
+# Ruta para manejar el envío del formulario y agregar los datos a la base de datos
+@app.route('/agregar_empleado', methods=['POST'])
+def agregar_empleado():
+    # Obtener los datos del formulario
+    data = request.get_json()
+    nombre_empleado = data.get('nombre_empleado')
+    rango = data.get('rango')
+    porcentaje = data.get('porcentaje')
+    telefono = data.get('telefono')
+    direccion = data.get('direccion')
+    nacionalidad = data.get('nacionalidad')
+    fecha_ingreso = data.get('fecha_ingreso')
+
+    # Obtener la fecha y hora actuales
+    fecha_actual = datetime.now().strftime('%d/%m/%Y')
+    hora_actual = datetime.now().strftime('%H:%M')
+    
+    # Insertar los datos en la base de datos
+    if (nombre_empleado and rango and telefono and porcentaje):
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""INSERT INTO empleados (nombre, rango, porcentaje, telefono, direccion, nacionalidad, fecha_ingreso) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?)""", 
+                       (nombre_empleado, rango, porcentaje, telefono, direccion, nacionalidad, fecha_ingreso))
+        conn.commit()
+        conn.close()
+    
+    # Redirigir a la página de planilla o refrescar los datos
+        return jsonify({"success": True, "message": "Empleado agregado con éxito"})
+    else:
+        return jsonify({"success": False, "message": "Datos inválidos"}), 400
+
 
 
 if __name__ == "__main__":

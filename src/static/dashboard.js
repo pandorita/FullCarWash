@@ -142,20 +142,26 @@ document.addEventListener('DOMContentLoaded', function () {
                     mainContent.innerHTML = data; // Cargar contenido dinámico
                 })
                 .catch(error => console.error('Error al cargar los vehiculos:', error));
-            }
+        }
 
-            // Detectar si el botón Personal fue clickeado
-            else if (event.target.closest('#btnPersonal')) {
-                if (evitarRecargaSiEnPestañaActual('/dashboard/personal')) return;
-                console.log("Botón Personal clickeado");
-                window.history.pushState({}, '', '/dashboard/personal'); // Actualiza la URL
-                fetch('/dashboard/personal')
-                    .then(response => response.text())
-                    .then(data => {
-                        mainContent.innerHTML = data; // Cargar contenido dinámico
-                    })
-                    .catch(error => console.error('Error al cargar el personal:', error));
-            }
+        // Detectar si el botón Personal fue clickeado
+        else if (event.target.closest('#btnPersonal')) {
+            if (evitarRecargaSiEnPestañaActual('/dashboard/personal')) return;
+            console.log("Botón Personal clickeado");
+            window.history.pushState({}, '', '/dashboard/personal'); // Actualiza la URL
+            fetch('/dashboard/personal')
+                .then(response => response.text())
+                .then(data => {
+                    mainContent.innerHTML = data; // Cargar contenido dinámico
+                })
+                .catch(error => console.error('Error al cargar el personal:', error));
+        }
+
+        // Detectar si el botón Agregar Servicio fue clickeado
+        else if (event.target.closest('#btnAgregarPersonal')) {
+            console.log("Botón Agregar Empleado clickeado");
+            cargarNuevoPersonal(); // Carga nuevo_servicio.html
+        }
         });
     });
 
@@ -223,7 +229,18 @@ function cargarNuevoServicio() {
         .catch(error => console.error('Error al cargar el formulario de servicio:', error));
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const mainContent = document.getElementById('bienvenida'); // Contenedor principal del contenido dinámico
 
+    // Delegación de eventos al cuerpo del documento
+    document.body.addEventListener('click', function (event) {
+        // Detectar si el botón Agregar Personal fue clickeado
+        if (event.target.closest('#btnAgregarPersonal')) {
+            console.log("Botón Agregar Empleado clickeado");
+            cargarNuevoPersonal(); // Carga nuevo_personal.html
+        }
+    });
+});
 
 
 // Función para configurar eventos de nuevo_servicio.html
@@ -311,6 +328,101 @@ function agregarEventoNuevoCliente() {
             botonAgregarCliente.addEventListener('click', function() {
                 console.log("Botón Agregar Cliente clickeado");
                 cargarNuevoServicio(); // Carga nuevo_servicio.html
+            });
+        } else {
+            console.error("El botón 'Agregar Cliente' no se encontró en el DOM.");
+        }
+    }, 100); // Retraso de 100ms para asegurarte de que el DOM se haya actualizado
+}
+
+//Funcion actualizacion tabla empleados
+function recargarPersonal() {
+    fetch('/dashboard/personal')
+        .then(response => response.text())
+        .then(data => {
+            const mainContent = document.getElementById('bienvenida');
+            mainContent.innerHTML = data; // Reemplaza contenido de main con planilla.html
+
+            // Asegúrate de que el DOM esté listo antes de agregar eventos
+            agregarEventoNuevoPersonal();
+        })
+        .catch(error => console.error('Error al recargar planilla:', error));
+}
+
+// Función para cargar nuevo_personal.html y configurar eventos
+function cargarNuevoPersonal() {
+    fetch('/dashboard/nuevo_personal')
+        .then(response => response.text())
+        .then(data => {
+            const mainContent = document.getElementById('bienvenida');
+            mainContent.innerHTML = data; // Reemplaza el contenido con nuevo_personal.html
+            
+            // Configurar eventos para los botones dentro de nuevo_personal.html
+            const btnAceptar = document.getElementById('btnAceptar');
+            const btnCancelar = document.getElementById('btnCancelar');
+
+            if (btnAceptar) {
+                btnAceptar.addEventListener('click', function(event) { 
+                    event.preventDefault(); // Evita el envío por defecto del formulario
+
+                    // Recoger los datos del formulario
+                    const nombre_empleado = document.getElementById('nombre_empleado').value;
+                    const rango = document.getElementById('rango').value;
+                    const porcentaje = document.getElementById('porcentaje').value;
+                    const telefono = document.getElementById('telefono').value;
+                    const direccion = document.getElementById('direccion').value;
+                    const nacionalidad = document.getElementById('nacionalidad').value;
+                    const fecha_ingreso = document.getElementById('fecha_ingreso').value;
+
+                    // Enviar los datos al servidor con fetch
+                    fetch('/agregar_empleado', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ nombre_empleado, rango, porcentaje, telefono, direccion, nacionalidad, fecha_ingreso })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Recargar personal dentro de dashboard
+                            fetch('/dashboard/personal')
+                                .then(response => response.text())
+                                .then(data => {
+                                    mainContent.innerHTML = data; // Reemplaza contenido de main con personal.html
+                                })
+                                .catch(error => console.error('Error al recargar personal:', error));
+                        } else {
+                            console.error('Error al agregar al personal:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error en la solicitud:', error));
+                });
+            }
+
+            if (btnCancelar) {
+                btnCancelar.addEventListener('click', function() {
+                    // Redirigir a la planilla
+                    fetch('/dashboard/personal')
+                        .then(response => response.text())
+                        .then(data => {
+                            mainContent.innerHTML = data; // Reemplaza contenido de main con personal.html
+                        })
+                        .catch(error => console.error('Error al recargar personal:', error));
+                });
+            }
+        })
+        .catch(error => console.error('Error al cargar el formulario de personal:', error));
+}
+
+// Evento para el botón Agregar Servicio
+function agregarEventoNuevoPersonal() {
+    setTimeout(() => { // Retrasa la búsqueda del botón para asegurar que el DOM esté listo
+        const botonAgregarCliente = document.getElementById('btnAgregarPersonal');
+        if (botonAgregarCliente) {
+            console.log("Asociando evento al botón 'Agregar Cliente'.");
+            botonAgregarCliente.addEventListener('click', function() {
+                console.log("Botón Agregar Cliente clickeado");
+                cargarNuevoPersonal(); // Carga nuevo_servicio.html
             });
         } else {
             console.error("El botón 'Agregar Cliente' no se encontró en el DOM.");

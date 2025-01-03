@@ -1,0 +1,89 @@
+<div id="formNuevoPersonal">
+    <form id="formNuevoPersonal">
+        <div>
+            <label for="nombre_empleado">Nombre:</label>
+            <input type="text" id="nombre_empleado" name="nombre_empleado" required>
+        </div>
+        <div>
+            <label for="rango">Cargo:</label>
+            <input type="text" id="rango" name="rango" required>
+        </div>
+        <div>
+            <label for="porcentaje">Porcentaje de ganancia:</label>
+            <input type="text" id="porcentaje" name="porcentaje" required>
+        </div>
+        <div>
+            <label for="telefono">Telefono:</label>
+            <input type="text" id="telefono" name="telefono" required>
+        </div>
+        <div>
+            <label for="direccion">Direccion:</label>
+            <input type="text" id="direccion" name="direccion" required>
+        </div>
+        <div>
+            <label for="nacionalidad">Nacionalidad:</label>
+            <input type="text" id="nacionalidad" name="nacionalidad" required>
+        </div>
+        <div>
+            <label for="fecha_ingreso">Fecha de Ingreso:</label>
+            <input type="text" id="fecha_ingreso" name="fecha_ingreso" required>
+        </div>
+        <div>
+            <button type="button" id="btnAceptar">Aceptar</button>
+            <button type="button" id="btnCancelar">Cancelar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Manejo del botón Aceptar
+    if (btnAceptar) {
+        btnAceptar.addEventListener('click', function(event) {
+            event.preventDefault(); // Evita el envío por defecto del formulario
+
+            // Recoger los datos del formulario
+            const nombre_empleado = document.getElementById('nombre_empleado').value;
+            const rango = document.getElementById('rango').value;
+            const porcentaje = document.getElementById('porcentaje').value;
+            const telefono = document.getElementById('telefono').value;
+            const direccion = document.getElementById('direccion').value;
+            const nacionalidad = document.getElementById('nacionalidad').value;
+            const fecha_ingreso = document.getElementById('fecha_ingreso').value;
+
+            // Enviar los datos al servidor con fetch
+            fetch('/agregar_empleado', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre_empleado, rango, porcentaje, telefono, direccion, nacionalidad, fecha_ingreso })
+            })
+            .then(response => {
+                if (response.ok) {
+                    recargarPersonal(); // Recargar planilla después de agregar el servicio
+                } else {
+                    console.error('Error al agregar el servicio:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Error en la solicitud:', error));
+        });
+    }
+
+    // Manejo del botón Cancelar
+    if (btnCancelar) {
+        btnCancelar.addEventListener('click', function() {
+            recargarPersonal(); // Recargar planilla al cancelar
+        });
+    }
+
+    // Función para recargar la tabla de empleados
+    function recargarPersonal() {
+    fetch('/dashboard/personal')
+        .then(response => response.text())
+        .then(data => {
+            const mainContent = document.getElementById('bienvenida');
+            mainContent.innerHTML = data; // Reemplaza el contenido con personal.html
+        })
+        .catch(error => console.error('Error al recargar personal:', error));
+    }
+</script>
