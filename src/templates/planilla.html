@@ -30,38 +30,187 @@
             <span>Eliminar</span>
         </button>
     </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Cliente</th>
-                <th>Patente</th>
-                <th>Hora Ing.</th>
-                <th>Servicio</th>
-                <th>Lavador</th>
-                <th>Total</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if servicios %}
-                {% for service in servicios %}
+    <div class="filtro-fecha">
+        <label for="fechaFiltro">Filtrar por fecha:</label>
+        <input type="date" id="fechaFiltro">
+        <button id="btnFiltrarFecha">Filtrar</button>
+    </div>
+    <div id="bienvenida">
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ service[1] }}</td>  
-                    <td>{{ service[4] }}</td> 
-                    <td>{{ service[8] }}</td>
-                    <td>{{ service[6] }}</td>
-                    <td>{{ service[5] }}</td>
-                    <td>${{ service[10] }}</td> 
-                    <td>{{ service[11] }}</td> 
+                    <th>Cliente</th>
+                    <th>Patente</th>
+                    <th>Hora Ing.</th>
+                    <th>Servicio</th>
+                    <th>Lavador</th>
+                    <th>Total</th>
+                    <th>Estado</th>
                 </tr>
-                {% endfor %}
-            {% else %}
-            <tr>
-                <td colspan="7" style="text-align: center;">No hay servicios disponibles.</td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% if servicios %}
+                    {% for service in servicios %}
+                    <tr data-id="{{ service[0] }}">
+                        <td>{{ service[1] }}</td>  
+                        <td>{{ service[4] }}</td> 
+                        <td>{{ service[8] }}</td>
+                        <td>{{ service[6] }}</td>
+                        <td>{{ service[5] }}</td>
+                        <td>${{ service[10] }}</td> 
+                        <td class="estado-{{ service[11]|lower }}">{{ service[11] }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+<div id="modalLavador" class="modal">
+    <div class="modal-content">
+        <h2>Seleccionar Lavador</h2>
+        <select id="selectLavador">
+            <option value="">Seleccione un lavador...</option>
+        </select>
+        <div class="modal-buttons">
+            <button id="btnConfirmarLavador">Confirmar</button>
+            <button id="btnCancelarLavador">Cancelar</button>
+        </div>
+    </div>
+</div>
+<!-- Agregar a planilla.html -->
+<div id="modalRevisar" class="modal">
+    <div class="modal-content">
+        <h2>Revisar Servicio</h2>
+        <div class="checklist">
+            <div class="checklist-item">
+                <input type="checkbox" id="checkVidrios">
+                <label for="checkVidrios">Limpieza de vidrios</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="checkAspirado">
+                <label for="checkAspirado">Aspirado</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="checkEncerado">
+                <label for="checkEncerado">Encerado</label>
+            </div>
+        </div>
+        <div class="modal-buttons">
+            <button id="btnConfirmarRevision">Confirmar</button>
+            <button id="btnCancelarRevision">Cancelar</button>
+        </div>
+    </div>
+</div>
+<!-- Agregar a planilla.html -->
+<div id="modalPago" class="modal">
+    <div class="modal-content">
+        <h2>Detalle de Pago</h2>
+        <div class="detalles-servicio">
+            <h3>Detalle del Servicio</h3>
+            <p>Cliente: <span id="detalleCliente"></span></p>
+            <p>Vehículo: <span id="detalleVehiculo"></span></p>
+            <p>Patente: <span id="detallePatente"></span></p>
+            <p>Lavador: <span id="detalleLavador"></span></p>
+            <p>Servicio: <span id="detalleServicio"></span></p>
+            <p>Valor: $<span id="detalleValor"></span></p>
+        </div>
+        <div class="forma-pago">
+            <h3>Forma de Pago</h3>
+            <select id="selectFormaPago">
+                <option value="">Seleccione forma de pago...</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="debito">Débito</option>
+                <option value="credito">Crédito</option>
+            </select>
+        </div>
+        <div class="modal-buttons">
+            <button id="btnConfirmarPago">Confirmar Pago</button>
+            <button id="btnCancelarPago">Cancelar</button>
+        </div>
+    </div>
+</div>
+<!-- Agregar a planilla.html -->
+<div id="modalEliminar" class="modal">
+    <div class="modal-content">
+        <h2>Eliminar Servicio</h2>
+        <p>Ingrese contraseña para confirmar eliminación:</p>
+        <input type="password" id="passwordEliminar" placeholder="Contraseña">
+        <div class="modal-buttons">
+            <button id="btnConfirmarEliminar">Confirmar</button>
+            <button id="btnCancelarEliminar">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+
+<style>
+.detalles-servicio, .forma-pago {
+    margin: 20px 0;
+}
+
+.detalles-servicio p {
+    margin: 5px 0;
+}
+
+#selectFormaPago {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+}
+
+.checklist {
+    margin: 20px 0;
+}
+
+.checklist-item {
+    margin: 10px 0;
+}
+
+.checklist-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    width: 300px;
+    border-radius: 5px;
+}
+
+.selected-row {
+    background-color: #da8787;
+}
+
+.estado-recibido {
+    color: #FF8C00; /* Naranja */
+    font-weight: bold;
+}
+
+.estado-revisado {
+    color: #FFD700; /* Amarillo */
+    font-weight: bold;
+}
+
+.estado-pagado {
+    color: #32CD32; /* Verde */
+    font-weight: bold;
+}
+
+.lavador-none {
+    color: #FF0000; /* Rojo */
+    font-weight: bold;
+}
+</style>
 </body>
 </html>

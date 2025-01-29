@@ -173,18 +173,19 @@ def agregar_servicio():
     patente = data.get('patente')
     servicio = data.get('servicio')
     valor = 10000 #Eliminar linea y agregar sistema automatico desde tipo de servicio
+    estado = 'Recibido'
 
     # Obtener la fecha y hora actuales
-    fecha_actual = datetime.now().strftime('%d/%m/%Y')
+    fecha_actual = datetime.now().strftime('%Y-%m-%d')
     hora_actual = datetime.now().strftime('%H:%M')
     
     # Insertar los datos en la base de datos
     if (cliente and servicio and telefono and patente):
         conn = sqlite3.connect(DATABASE_PATH)
         cursor = conn.cursor()
-        cursor.execute("""INSERT INTO planilla (cliente, telefono, vehiculo, patente, servicio, fecha, hora_ing, valor_total) 
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)""", 
-                       (cliente, telefono, vehiculo, patente, servicio, fecha_actual, hora_actual, valor))
+        cursor.execute("""INSERT INTO planilla (cliente, telefono, vehiculo, patente, servicio, fecha, hora_ing, valor_total, estado) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""", 
+                       (cliente, telefono, vehiculo, patente, servicio, fecha_actual, hora_actual, valor, estado))
         conn.commit()
         conn.close()
     
@@ -309,6 +310,138 @@ def agregar_empleado():
     else:
         return jsonify({"success": False, "message": "Datos inválidos"}), 400
 
+# Ruta para filtrar servicios por fecha
+@app.route('/dashboard/filtrar_servicios')
+def filtrar_servicios():
+    fecha = request.args.get('fecha')
+    print(f"Fecha recibida para filtrar: {fecha}")
+    
+    if fecha:
+        try:
+            conn = sqlite3.connect(DATABASE_PATH)
+            cursor = conn.cursor()
+            
+            # Consultar los servicios filtrados por fecha
+            cursor.execute("SELECT * FROM planilla WHERE fecha = ? AND estado != 'Eliminado'", (fecha,))
+            servicios = cursor.fetchall()
+            print(f"Servicios encontrados: {len(servicios)}")
+            
+            conn.close()
+            
+            return render_template('planilla.html', servicios=servicios)
+        except Exception as e:
+            print(f"Error al filtrar servicios: {str(e)}")
+            return redirect(url_for('dashboard_planilla'))
+    
+    return redirect(url_for('dashboard_planilla'))
+
+# Agregar a app.py
+@app.route('/obtener_lavadores')
+def obtener_lavadores():
+    conn = sqlite3.connect(DATABASE_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, nombre FROM empleados WHERE rango = 'lavador'")
+    lavadores = cursor.fetchall()
+    conn.close()
+    
+    return jsonify([{'id': id, 'nombre': nombre} for id, nombre in lavadores])
+
+# En app.py - Modificar la función asignar_lavador
+@app.route('/asignar_lavador', methods=['POST'])
+def asignar_lavador():
+    data = request.get_json()
+    servicio_id = data.get('servicioId')
+    lavador_id = data.get('lavadorId')
+    
+    print(f"Asignando lavador ID {lavador_id} al servicio ID {servicio_id}")
+    
+    try:
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        
+        # Primero obtener el nombre del lavador
+        cursor.execute("SELECT nombre FROM empleados WHERE id = ?", (lavador_id,))
+        lavador_nombre = cursor.fetchone()[0]
+        
+        # Actualizar el servicio con el nombre del lavador
+        cursor.execute("UPDATE planilla SET lavador = ? WHERE id = ?", 
+                      (lavador_nombre, servicio_id))
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error al asignar lavador: {str(e)}")
+        return jsonify({"success": False, "error": str(e)})
+
+# Agregar a app.py
+@app.route('/actualizar_estado_servicio', methods=['POST'])
+def actualizar_estado_servicio():
+    data = request.get_json()
+    servicio_id = data.get('servicioId')
+    estado = data.get('estado')
+    
+    try:
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        
+        cursor.execute("UPDATE planilla SET estado = ? WHERE id = ?", 
+                      (estado, servicio_id))
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error al actualizar estado: {str(e)}")
+        return jsonify({"success": False, "error": str(e)})
+
+# Agregar a app.py
+@app.route('/procesar_pago', methods=['POST'])
+def procesar_pago():
+    data = request.get_json()
+    servicio_id = data.get('servicioId')
+    forma_pago = data.get('formaPago')
+    
+    try:
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        
+        # Actualizar estado del servicio a Pagado
+        cursor.execute("UPDATE planilla SET estado = 'Pagado' WHERE id = ?", 
+                      (servicio_id,))
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error al procesar pago: {str(e)}")
+        return jsonify({"success": False, "error": str(e)})
+    
+# Agregar a app.py
+@app.route('/eliminar_servicio', methods=['POST'])
+def eliminar_servicio():
+    data = request.get_json()
+    servicio_id = data.get('servicioId')
+    password = data.get('password')
+    
+    # Contraseña hardcodeada para ejemplo - debería estar en config
+    if password != "admin123":
+        return jsonify({"success": False, "error": "Contraseña incorrecta"})
+    
+    try:
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        
+        # Actualizar estado del servicio a Eliminado
+        cursor.execute("UPDATE planilla SET estado = 'Eliminado' WHERE id = ?", 
+                      (servicio_id,))
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error al eliminar servicio: {str(e)}")
+        return jsonify({"success": False, "error": str(e)})
 
 
 if __name__ == "__main__":
