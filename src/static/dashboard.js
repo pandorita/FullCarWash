@@ -1,5 +1,6 @@
 console.log("Archivo JavaScript cargado");
 
+// Hora y fecha
 function updateDateTime() {
     const dateTimeElement = document.getElementById("dateTime");
     const now = new Date();
@@ -7,7 +8,7 @@ function updateDateTime() {
     dateTimeElement.textContent = now.toLocaleString("es-ES", options);
 }
 
-// Actualizar cada segundo
+// Actualizar cada segundo hora
 setInterval(updateDateTime, 1000);
 updateDateTime();  // Llamada inicial
 
@@ -18,6 +19,7 @@ const spans = document.querySelectorAll('span');
 const main = document.querySelector('main');
 const topbar = document.querySelector('header.navbar');
 
+// Minimizar y maximizar barra lateral
 autito.addEventListener("click", () => {
     barraLateral.classList.toggle('mini-barra-lateral');
     main.classList.toggle('min-main');
@@ -26,7 +28,7 @@ autito.addEventListener("click", () => {
     spans.forEach((span) =>{
         span.classList.toggle('oculto');
     });
-});     
+});
 
 // Función para asignar eventos a los botones
 function asignarEventos() {
@@ -56,6 +58,7 @@ function asignarEventos() {
                         }
                         
                         asignarEventos();
+
                     })
                     .catch(error => console.error('Error al cargar la planilla:', error));
             }
@@ -128,6 +131,22 @@ function asignarEventos() {
         });
     }
 
+    // Evento para mostrar todos los servicios
+    const btnMostrarTodo = document.getElementById('btnMostrarTodo');
+    if (btnMostrarTodo) {
+        btnMostrarTodo.addEventListener('click', function() {
+            fetch('/dashboard/planilla')
+                .then(response => response.text())
+                .then(data => {
+                    const mainContent = document.getElementById('bienvenida');
+                    mainContent.innerHTML = data;
+                    asignarEventos();
+                })
+                .catch(error => console.error('Error al cargar todos los servicios:', error));
+        });
+    }
+    
+    // Evento para filtrar planilla por fecha
     const btnFiltrarFecha = document.getElementById('btnFiltrarFecha');
     if (btnFiltrarFecha) {
         btnFiltrarFecha.addEventListener('click', function() {

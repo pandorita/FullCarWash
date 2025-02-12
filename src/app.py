@@ -21,12 +21,12 @@ CREATE TABLE IF NOT EXISTS planilla (
     telefono TEXT NOT NULL,
     vehiculo TEXT NOT NULL,
     patente TEXT NOT NULL,
-    lavador TEXT NOT NULL,
+    lavador TEXT,
     servicio TEXT NOT NULL,
     fecha TEXT NOT NULL,
     hora_ing TIME NOT NULL,       
     hora_sal TIME,                 
-    valor_total REAL NOT NULL,
+    valor_total REAL,
     estado TEXT NOT NULL
 );
 
@@ -100,6 +100,33 @@ CREATE TABLE IF NOT EXISTS dailychecklist (
 
 
 """
+
+def init_db():
+    try:
+        # Set timeout and attempt to connect
+        conn = sqlite3.connect(DATABASE_PATH, timeout=20)
+        
+        # Configure database settings
+        conn.execute("PRAGMA busy_timeout = 5000")  # 5 second timeout
+        conn.execute("PRAGMA locking_mode = NORMAL")
+        conn.execute("PRAGMA journal_mode = DELETE")
+        conn.execute("PRAGMA synchronous = NORMAL")
+        
+        # Execute schema
+        conn.executescript(SCHEMA)
+        conn.commit()
+        conn.close()
+    except sqlite3.OperationalError as e:
+        print(f"Database error: {e}")
+        # If database is locked, try to force close connections
+        try:
+            conn = sqlite3.connect(DATABASE_PATH)
+            conn.execute("PRAGMA optimize")
+            conn.close()
+        except:
+            pass
+        raise
+
 
 # Página principal ayuda
 @app.route('/')
@@ -445,8 +472,11 @@ def eliminar_servicio():
 
 
 if __name__ == "__main__":
-    # Crear base de datos al iniciar la aplicación
-    create_database()
+    # Create database directory if it doesn't exist
+    os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
+    
+    # Initialize database
+    init_db()
     print("¡Todo listo para empezar!")
     app.config.from_object(config['development'])
-    app.run()
+    app.run(debug=True)
